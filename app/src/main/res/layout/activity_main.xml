@@ -50,4 +50,14 @@
         android:layout_marginTop="63dp"
         android:text="O nas"
         android:onClick="onasa"/>
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button4"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="www test"
+        android:onClick="www"/>
 </RelativeLayout>

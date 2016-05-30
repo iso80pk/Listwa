@@ -32,4 +32,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent =new Intent(this,ONas.class);
         startActivity(intent);
     }
+    public void www(View view) {
+        Intent intent =new Intent(this,WWWActivity.class);
+        startActivity(intent);
+    }
+
 }

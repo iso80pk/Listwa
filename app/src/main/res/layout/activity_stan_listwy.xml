@@ -19,25 +19,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="światło w akwarium  "
-        android:id="@+id/switch2"
-        android:layout_marginTop="29dp"
-        android:layout_below="@+id/switch1"
-        android:layout_alignRight="@+id/switch1"
-        android:layout_alignEnd="@+id/switch1" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sypialnia  "
-        android:id="@+id/switch3"
-        android:layout_below="@+id/switch2"
-        android:layout_alignRight="@+id/switch2"
-        android:layout_alignEnd="@+id/switch2"
-        android:layout_marginTop="27dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,8 +26,39 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Stan listwy"
         android:id="@+id/textView8"
+        android:layout_below="@+id/isConnected"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/isConnected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="#FF0000"
+        android:textColor="#FFF"
+        android:textSize="18dp"
+        android:text="Połączono z Internetem?"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:layout_below="@+id/button13"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/textView8"
+        android:layout_alignEnd="@+id/textView8" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Json"
+        android:id="@+id/button13"
+        android:layout_below="@+id/switch1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp" />
+        android:onClick="jsonclick"/>
+
 
 </RelativeLayout>

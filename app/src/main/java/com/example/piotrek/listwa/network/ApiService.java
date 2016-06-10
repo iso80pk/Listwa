@@ -1,5 +1,8 @@
 package com.example.piotrek.listwa.network;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
+
 import com.octo.android.robospice.retrofit.RetrofitGsonSpiceService;
 
 /**
@@ -7,7 +10,10 @@ import com.octo.android.robospice.retrofit.RetrofitGsonSpiceService;
  */
 public class ApiService  extends RetrofitGsonSpiceService {
 
+
+
     private final static String BASE_URL = "https://cloud.arest.io/889785849";
+    //889785849
 
     @Override
     public void onCreate() {
@@ -17,7 +23,8 @@ public class ApiService  extends RetrofitGsonSpiceService {
 
     @Override
     protected String getServerUrl() {
-        return BASE_URL;
+        //SharedPreferences preferences = getSharedPreferences("ActualURL",0);
+        return BASE_URL;// preferences.getString("Dupa", "dupa.com");
     }
 
 }

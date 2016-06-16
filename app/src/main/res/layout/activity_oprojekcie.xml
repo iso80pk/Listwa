@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Składa się z niniejszej aplikacji, aplikacji umieszczonej na serwerze zewnętrznym oraz modułu ESP 12345."
+        android:text="Składa się z niniejszej aplikacji, aplikacji umieszczonej na serwerze zewnętrznym oraz modułu ESP 8266."
         android:id="@+id/textView7"
         android:layout_below="@+id/textView3"
         android:layout_alignParentLeft="true"

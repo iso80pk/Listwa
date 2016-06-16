@@ -7,12 +7,16 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.piotrek.listwa.models.DeviceStatus;
 import com.example.piotrek.listwa.models.MyResponse;
+import com.example.piotrek.listwa.network.DeviceStatusRequest;
 import com.example.piotrek.listwa.network.InternetActivity;
 import com.example.piotrek.listwa.network.MyResponseRequest;
 import com.google.android.gms.appindexing.Action;
@@ -26,21 +30,13 @@ import java.io.IOException;
 //AppCompatActivity
 public class StanListwy extends InternetActivity {
 
-
-    private String string;
-
-
-    private static final String PREFERENCES_NAME = "myPreferences";
-    private static final String PREFERENCES_NAME1 = "myPreferences1";
-    private static final String PREFERENCES_NAME2 = "myPreferences2";
-    private static final String PREFERENCES_TEXT_FIELD = "textField";
-    private static final String PREFERENCES_TEXT_FIELD1 = "textField";
-    private static final String PREFERENCES_TEXT_FIELD2 = "textField";
-    private SharedPreferences preferences;
-    private SharedPreferences preferences1;
-    private SharedPreferences preferences2;
-
     TextView isConnected;
+    Switch D5;
+    Switch D16;
+    Switch D14;
+    Switch D12;
+    Switch D13;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -52,12 +48,16 @@ public class StanListwy extends InternetActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stan_listwy);
-        preferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        preferences1 = getSharedPreferences(PREFERENCES_NAME1, Activity.MODE_PRIVATE);
-        preferences2 = getSharedPreferences(PREFERENCES_NAME2, Activity.MODE_PRIVATE);
 
 
         isConnected = (TextView) findViewById(R.id.isConnected);
+
+        D5 = (Switch) findViewById(R.id.switchD5);
+        D16 = (Switch) findViewById(R.id.switchD16);
+        D14 = (Switch) findViewById(R.id.switchD14);
+        D12 = (Switch) findViewById(R.id.switchD12);
+        D13 = (Switch) findViewById(R.id.switchD13);
+
 
         // check if you are connected or not
         if (isConnected()) {
@@ -66,18 +66,32 @@ public class StanListwy extends InternetActivity {
         } else {
             isConnected.setText("Nie masz połączenia z siecia!");
         }
-        // add click listener to Button "POST"
+
+        DeviceStatusRequest deviceStatusRequest = new DeviceStatusRequest();
+        spiceManager.execute(deviceStatusRequest, new RequestListener<DeviceStatus>() {
 
 
-        string = "";
-        string += "IP: ";
-        string += preferences.getString(PREFERENCES_TEXT_FIELD, "");
-        string += "\nNazwa: ";
-        string += preferences1.getString(PREFERENCES_TEXT_FIELD1, "");
-        string += "\nHasło: ";
-        string += preferences2.getString(PREFERENCES_TEXT_FIELD2, "");
-        EditText editText = (EditText) findViewById(R.id.editText2);
-        editText.setText(string);
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                showToast("błąd: " + spiceException.getMessage());
+                setSwitchesLstener();
+            }
+
+            @Override
+            public void onRequestSuccess(DeviceStatus deviceStatus) {
+                D5.setChecked(deviceStatus.isD5());
+                D16.setChecked(deviceStatus.isD16());
+                D14.setChecked(deviceStatus.isD14());
+                D12.setChecked(deviceStatus.isD12());
+                D13.setChecked(deviceStatus.isD13());
+                showToast("Pobrano aktualny stan przełączników");
+                setSwitchesLstener();
+
+            }
+        });
+
+
+
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -94,28 +108,7 @@ public class StanListwy extends InternetActivity {
             return false;
     }
 
-    public void jsonclick(View view) throws IOException {
 
-        TextView myAwesomeTextView = (TextView) findViewById(R.id.textView8);
-        myAwesomeTextView.setText("Klikłeśś");
-
-
-        MyResponseRequest myResponseRequest = new MyResponseRequest(5,0);
-        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                showToast("błąd..."+ spiceException.getMessage());
-            }
-
-            @Override
-            public void onRequestSuccess(MyResponse myResponse) {
-                showToast((String) myResponse.getMessage());
-            }
-        });
-
-
-
-    }
 
 
     @Override
@@ -159,5 +152,176 @@ public class StanListwy extends InternetActivity {
     }
     private void showToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setSwitchesLstener(){
+        D5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(5, 1);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(false);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                } else {
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(5, 0);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(true);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                }
+            }
+        });
+
+
+        D16.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(16, 1);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(false);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                } else {
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(16, 0);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(true);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                }
+            }
+        });
+
+        D14.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(14, 1);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(false);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                } else {
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(14, 0);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(true);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                }
+            }
+        });
+
+        D12.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(12, 1);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(false);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                } else {
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(12, 0);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(true);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                }
+            }
+        });
+
+
+        D13.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(13, 1);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(false);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                } else {
+                    MyResponseRequest myResponseRequest = new MyResponseRequest(13, 0);
+                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            showToast("błąd: " + spiceException.getMessage());
+                            D5.setChecked(true);
+                        }
+                        @Override
+                        public void onRequestSuccess(MyResponse myResponse) {
+                            showToast((String) myResponse.getMessage());
+                        }
+                    });
+                }
+            }
+        });
+
+
     }
 }

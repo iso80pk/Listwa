@@ -9,56 +9,88 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.piotrek.listwa.StanListwy">
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lampka nocna  "
-        android:id="@+id/switch1"
-        android:layout_marginTop="86dp"
-        android:checked="false"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-
-    <TextView
+      <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Stan listwy"
         android:id="@+id/textView8"
-        android:layout_below="@+id/isConnected"
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:id="@+id/isConnected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:background="#FF0000"
         android:textColor="#FFF"
         android:textSize="18dp"
         android:text="Połączono z Internetem?"
-        android:layout_alignParentTop="true"
+        android:id="@+id/isConnected"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/textView8"
         android:layout_centerHorizontal="true" />
 
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:layout_below="@+id/button13"
-        android:layout_marginTop="10dp"
-        android:layout_alignRight="@+id/textView8"
-        android:layout_alignEnd="@+id/textView8" />
 
-    <Button
+
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Json"
-        android:id="@+id/button13"
-        android:layout_below="@+id/switch1"
-        android:layout_centerHorizontal="true"
-        android:onClick="jsonclick"/>
+        android:text="D5  "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/switchD5"
+        android:layout_marginTop="30dp"
+        android:checked="false"
+        android:layout_below="@+id/isConnected"
+        android:layout_centerHorizontal="true" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="D16 "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/switchD16"
+        android:layout_marginTop="15dp"
+        android:checked="false"
+        android:layout_below="@+id/switchD5"
+        android:layout_centerHorizontal="true" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="D14 "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/switchD14"
+        android:layout_marginTop="15dp"
+        android:checked="false"
+        android:layout_below="@+id/switchD16"
+        android:layout_centerHorizontal="true" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="D12 "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/switchD12"
+        android:layout_marginTop="15dp"
+        android:checked="false"
+        android:layout_below="@+id/switchD14"
+        android:layout_centerHorizontal="true" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="D13 "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/switchD13"
+        android:layout_marginTop="15dp"
+        android:checked="false"
+        android:layout_below="@+id/switchD12"
+        android:layout_centerHorizontal="true" />
+
+
+
+
 
 
 </RelativeLayout>

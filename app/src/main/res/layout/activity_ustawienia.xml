@@ -17,15 +17,27 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:inputType="number"
+        android:textAlignment="center"
+        android:textIsSelectable="false" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextTime"
+        android:layout_below="@+id/textView132"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:inputType="number"
+        android:textAlignment="center"
         android:textIsSelectable="false" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="ID klienta w aREST"
+        android:text="ID klienta"
         android:id="@+id/textView9"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/textView10"
         android:layout_centerHorizontal="true" />
 
@@ -38,15 +50,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editText3"
-        android:layout_below="@+id/textView12"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+
 
     <TextView
         android:layout_width="match_parent"
@@ -55,7 +59,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Nie pobrano adresu lokalnego"
         android:layout_below="@+id/textView11"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:textAlignment="center" />
 
@@ -69,15 +73,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp" />
 
-    TextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Hasło  ??"
-        android:id="@+id/textView12"
+        android:text="Czas włączenia po wykryciu ruchu [s]"
+        android:id="@+id/textView132"
         android:layout_below="@+id/editText4"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp" />
+        android:layout_marginTop="20dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -86,6 +90,18 @@
         android:id="@+id/button"
         android:layout_below="@+id/editText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="33dp" />
+        android:layout_marginTop="15dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ustaw"
+        android:id="@+id/buttonTime"
+        android:layout_below="@+id/editTextTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:onClick="ustawCzas"/>
+
+
 
 </RelativeLayout>

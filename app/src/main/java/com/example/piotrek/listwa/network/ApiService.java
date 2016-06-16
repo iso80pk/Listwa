@@ -13,6 +13,7 @@ public class ApiService  extends RetrofitGsonSpiceService {
 
 
     private final static String BASE_URL = "https://cloud.arest.io/889785849";
+   // private final static String BASE_URL = "";
     //889785849
 
     @Override
@@ -23,8 +24,9 @@ public class ApiService  extends RetrofitGsonSpiceService {
 
     @Override
     protected String getServerUrl() {
-        //SharedPreferences preferences = getSharedPreferences("ActualURL",0);
-        return BASE_URL;// preferences.getString("Dupa", "dupa.com");
+        SharedPreferences preferences = getSharedPreferences("ActualURL",Activity.MODE_PRIVATE);
+        return  preferences.getString("Dupa", "dupa.com");
+      //  return BASE_URL;//+preferences.getString("Dupa", "dupa.com");
     }
 
 }

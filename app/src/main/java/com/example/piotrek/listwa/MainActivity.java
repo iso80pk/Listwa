@@ -34,6 +34,14 @@ public class MainActivity extends InternetActivity {
         preferences1 = getSharedPreferences(PREFERENCES_NAME1, Activity.MODE_PRIVATE);
         ActualURL =getSharedPreferences(PREFERENCES_ActualURL, Activity.MODE_PRIVATE);
 
+        // set URL
+        SharedPreferences aREST_ID = getSharedPreferences("myPreferences", Activity.MODE_PRIVATE);
+        String URL ="https://cloud.arest.io/"+aREST_ID.getString("textField", "");
+
+        SharedPreferences.Editor preferencesEditorURL = ActualURL.edit();
+        preferencesEditorURL.putString("Dupa",  URL);
+        preferencesEditorURL.commit();
+
         DigitalResponseRequest digitalResponseRequest = new DigitalResponseRequest();
         spiceManager.execute(digitalResponseRequest, new RequestListener<DigitalResponse>() {
 
@@ -41,7 +49,7 @@ public class MainActivity extends InternetActivity {
             public void onRequestFailure(SpiceException spiceException) {
                 showToast("Problem z komunikacja Internetową" );
 
-                String URL =preferences1.getString("textField", "");
+                String URL =preferences1.getString("textField", ""); // lokalny
                 //+ http:/
                 SharedPreferences.Editor preferencesEditorURL = ActualURL.edit();
                 preferencesEditorURL.putString("Dupa",URL);
@@ -60,7 +68,7 @@ public class MainActivity extends InternetActivity {
                     String URL ="https://cloud.arest.io/"+aREST_ID.getString("textField", "");
 
                     SharedPreferences.Editor preferencesEditorURL = ActualURL.edit();
-                    preferencesEditorURL.putString("textField",  URL);
+                    preferencesEditorURL.putString("Dupa",  URL);
                     preferencesEditorURL.commit();
 
                     SharedPreferences.Editor preferencesEditor1 = preferences1.edit();

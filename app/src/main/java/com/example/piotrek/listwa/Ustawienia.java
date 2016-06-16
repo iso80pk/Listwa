@@ -11,10 +11,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Ustawienia extends AppCompatActivity {
+import com.example.piotrek.listwa.models.SetTimer;
+import com.example.piotrek.listwa.network.InternetActivity;
+import com.example.piotrek.listwa.network.SetTimerRequest;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
+public class Ustawienia extends InternetActivity {
 
     private EditText aREST_ID;
+    private EditText time;
     private TextView localAddress;
+
 
 
     private Button btnSave;
@@ -39,6 +47,8 @@ public class Ustawienia extends AppCompatActivity {
 
         aREST_ID = (EditText) findViewById(R.id.editText);
         localAddress = (TextView) findViewById(R.id.editText4);
+        time= (EditText) findViewById(R.id.editTextTime);
+
 
 
         btnSave = (Button) findViewById(R.id.button);
@@ -77,5 +87,33 @@ public class Ustawienia extends AppCompatActivity {
 
     private void showToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void ustawCzas(View view) {
+        String timeFromGUI =time.getText().toString();
+
+        if(timeFromGUI.matches("")){
+            showToast("Podaj czas!");
+
+        }
+        else {
+            SetTimerRequest setTimerRequest = new SetTimerRequest(Integer.parseInt( timeFromGUI));
+            spiceManager.execute(setTimerRequest, new RequestListener<SetTimer>() {
+
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    showToast("błąd: " + spiceException.getMessage());
+                }
+
+                @Override
+                public void onRequestSuccess(SetTimer setTimer) {
+                    showToast("Ustawiono czas na "+setTimer.getReturn_value().toString() +" s.");
+
+                }
+            });
+        }
+
+
+
     }
 }

@@ -24,10 +24,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Jesteśmy studentami pierwszego roku informatyki. Imteresujemy się nowinkami z dziedziny informatyki, automatyki oraz elektroniki. W tym projekcje połączyliśmy nasze zainteresowania i stworzyliśmy inteligentną listwę."
         android:id="@+id/textView5"
+        android:layout_marginTop="46dp"
         android:layout_below="@+id/textView4"
-        android:layout_marginTop="53dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,20 +35,30 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Kontakt: mateusz.krasniak@gmail.com "
         android:id="@+id/textView6"
-        android:layout_below="@+id/textView5"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="45dp" />
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="maciek75575@gmail.com"
+        android:id="@+id/textView"
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/textView6"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="iso80pk@gmail.com"
-        android:id="@+id/textView"
-        android:layout_below="@+id/textView6"
-        android:layout_alignRight="@+id/textView6"
-        android:layout_alignEnd="@+id/textView6"
-        android:layout_marginTop="23dp" />
+        android:id="@+id/textView12"
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

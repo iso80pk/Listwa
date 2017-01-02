@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -74,7 +75,8 @@ public class StanListwy extends InternetActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 showToast("błąd: " + spiceException.getMessage());
-                setSwitchesLstener();
+                setListenersForSwitches();
+               // setOnclickSwitchesAction();
             }
 
             @Override
@@ -84,8 +86,9 @@ public class StanListwy extends InternetActivity {
                 D14.setChecked(deviceStatus.isD14());
                 D12.setChecked(deviceStatus.isD12());
                 D13.setChecked(deviceStatus.isD13());
-                showToast("Pobrano aktualny stan przełączników");
-                setSwitchesLstener();
+                showToast("Pobrano aktualny stan przełączników ?");
+                setListenersForSwitches();
+               // setOnclickSwitchesAction();
 
             }
         });
@@ -154,173 +157,397 @@ public class StanListwy extends InternetActivity {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    private void setSwitchesLstener(){
+
+    private void setListenersForSwitches (){
         D5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(5, 1);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(false);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
-                } else {
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(5, 0);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(true);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isConnected()) {
+                    if (isChecked) {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(5, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast(myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(5, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast(myResponse.getMessage());
+                            }
+                        });
+                    }
+                }
+                else{
+                    showToast("Brak połączenia z Internetem");
                 }
             }
-        });
 
+
+        });
 
         D16.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(16, 1);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(false);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
-                } else {
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(16, 0);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(true);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isConnected()) {
+                    if (isChecked) {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(16, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast(myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(16, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast(myResponse.getMessage());
+                            }
+                        });
+                    }
                 }
+                else{
+                    showToast("Brak połączenia z Internetem");
+                }
+
             }
         });
 
         D14.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(14, 1);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(false);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
-                } else {
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(14, 0);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(true);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isConnected()) {
+                    if(isChecked){
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(14, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(14, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    }
+
+
+                }
+                else{
+                    showToast("Brak połączenia z Internetem");
                 }
             }
         });
-
         D12.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(12, 1);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(false);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
-                } else {
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(12, 0);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(true);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isConnected()) {
+                    if(isChecked){
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(12, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(12, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    }
+
+
+
+                }
+                else{
+                    showToast("Brak połączenia z Internetem");
                 }
             }
         });
-
-
         D13.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(13, 1);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(false);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
-                } else {
-                    MyResponseRequest myResponseRequest = new MyResponseRequest(13, 0);
-                    spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            showToast("błąd: " + spiceException.getMessage());
-                            D5.setChecked(true);
-                        }
-                        @Override
-                        public void onRequestSuccess(MyResponse myResponse) {
-                            showToast((String) myResponse.getMessage());
-                        }
-                    });
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isConnected()) {
+                    if(isChecked){
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(13, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(13, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    }
+                }
+                else{
+                    showToast("Brak połączenia z Internetem");
                 }
             }
         });
+
+    }
+
+
+    private void setOnclickSwitchesAction(){
+    D5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isConnected()) {
+                    if (D5.isChecked()) {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(5, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast(myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(5, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast(myResponse.getMessage());
+                            }
+                        });
+                    }
+                }
+                else{
+                    showToast("Brak połączenia z Internetem");
+                }
+            }
+
+        });
+
+        D16.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isConnected()) {
+                    if (D16.isChecked()) {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(16, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast(myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(16, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast(myResponse.getMessage());
+                            }
+                        });
+                    }
+                }
+                else{
+                    showToast("Brak połączenia z Internetem");
+                }
+            }
+
+        });
+
+
+        D14.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isConnected()) {
+                    if(D14.isChecked()){
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(14, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(14, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    }
+
+
+                }
+                else{
+                    showToast("Brak połączenia z Internetem");
+                }
+            }
+
+        });
+
+        D12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isConnected()) {
+                    if(D12.isChecked()){
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(12, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(12, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    }
+
+
+
+                }
+                else{
+                    showToast("Brak połączenia z Internetem");
+                }
+            }
+
+        });
+
+        D13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isConnected()) {
+                    if(D13.isChecked()){
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(13, 1);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    } else {
+                        MyResponseRequest myResponseRequest = new MyResponseRequest(13, 0);
+                        spiceManager.execute(myResponseRequest, new RequestListener<MyResponse>() {
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                showToast("błąd: " + spiceException.getMessage());
+                            }
+                            @Override
+                            public void onRequestSuccess(MyResponse myResponse) {
+                                showToast((String) myResponse.getMessage());
+                            }
+                        });
+                    }
+                }
+                else{
+                    showToast("Brak połączenia z Internetem");
+                }
+            }
+
+        });
+
 
 
     }

@@ -16,13 +16,12 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 public class MainActivity extends InternetActivity {
 
+    private static final String PREFERENCES_NAME = "myPreferences";
+    private static final String ACTUAL_URL_KEY = "ACTUAL_URL";
+    private static final String AREST_CLIENT_NUMBER_KEY = "AREST_CLIENT_NUMBER"; //aREST ID
+    private static final String LOCAL_ESP_ADDRESS_KEY = "LOCAL_ESP_ADDRESS"; //ESP address in local network
 
-    private static final String PREFERENCES_NAME1 = "myPreferences1";
-    private SharedPreferences preferences1; //local addres
-
-    private static final String PREFERENCES_ActualURL= "ActualURL";
-    private SharedPreferences ActualURL;
-
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -30,17 +29,13 @@ public class MainActivity extends InternetActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedPreferences = getSharedPreferences(PREFERENCES_NAME,Activity.MODE_PRIVATE);
+        String urlUsedForCommunication ="https://cloud.arest.io/"+sharedPreferences.getString(AREST_CLIENT_NUMBER_KEY, "889785849");  //make correct url with aREST ID
 
-        preferences1 = getSharedPreferences(PREFERENCES_NAME1, Activity.MODE_PRIVATE);
-        ActualURL =getSharedPreferences(PREFERENCES_ActualURL, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(ACTUAL_URL_KEY,urlUsedForCommunication);
+        editor.commit();
 
-        // set URL
-        SharedPreferences aREST_ID = getSharedPreferences("myPreferences", Activity.MODE_PRIVATE);
-        String URL ="https://cloud.arest.io/"+aREST_ID.getString("textField", "");
-
-        SharedPreferences.Editor preferencesEditorURL = ActualURL.edit();
-        preferencesEditorURL.putString("Dupa",  URL);
-        preferencesEditorURL.commit();
 
         DigitalResponseRequest digitalResponseRequest = new DigitalResponseRequest();
         spiceManager.execute(digitalResponseRequest, new RequestListener<DigitalResponse>() {
@@ -49,40 +44,38 @@ public class MainActivity extends InternetActivity {
             public void onRequestFailure(SpiceException spiceException) {
                 showToast("Problem z komunikacja Internetową" );
 
-                String URL =preferences1.getString("textField", ""); // lokalny
-                //+ http:/
-                SharedPreferences.Editor preferencesEditorURL = ActualURL.edit();
-                preferencesEditorURL.putString("Dupa",URL);
-                preferencesEditorURL.commit();
-
-                //if(spiceException.getCause().)
+                //set local address as current address
+                String localAddress= sharedPreferences.getString(LOCAL_ESP_ADDRESS_KEY,"");
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(ACTUAL_URL_KEY,localAddress);
+                editor.commit();
 
 
             }
 
             @Override
             public void onRequestSuccess(DigitalResponse digitalResponse) {
-                if(digitalResponse.getConnected()){
+                if(digitalResponse.getConnected() == null){
+                    showToast("Nie skonfigurowano aREST"); //or ESP module is not connected ?
+                }
+                else if(digitalResponse.getConnected()){
 
-                    SharedPreferences aREST_ID = getSharedPreferences("myPreferences", Activity.MODE_PRIVATE);
-                    String URL ="https://cloud.arest.io/"+aREST_ID.getString("textField", "");
+                    // We have an Internet connection
 
-                    SharedPreferences.Editor preferencesEditorURL = ActualURL.edit();
-                    preferencesEditorURL.putString("Dupa",  URL);
-                    preferencesEditorURL.commit();
-
-                    SharedPreferences.Editor preferencesEditor1 = preferences1.edit();
-                    preferencesEditor1.putString("textField",  digitalResponse.getMessage().toString());
-                    preferencesEditor1.commit();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(LOCAL_ESP_ADDRESS_KEY, digitalResponse.getMessage().toString());
+                    editor.commit();
 
                 }
                 else {
-                    //URL do komunikacji
-                    String URL =preferences1.getString("textField", "");
-                    //+ http:/
-                    SharedPreferences.Editor preferencesEditorURL = ActualURL.edit();
-                    preferencesEditorURL.putString("Dupa",  URL);
-                    preferencesEditorURL.commit();
+                    //we don't have an Internet connection
+
+                    //set local address as current address
+                    String localAddress= sharedPreferences.getString(LOCAL_ESP_ADDRESS_KEY,"");
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(ACTUAL_URL_KEY,localAddress);
+                    editor.commit();
+
 
                     showToast("Moduł ESP nie ma połączenia z Internetem");
                 }

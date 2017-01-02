@@ -10,6 +10,10 @@ import com.octo.android.robospice.retrofit.RetrofitGsonSpiceService;
  */
 public class ApiService  extends RetrofitGsonSpiceService {
 
+    private static final String PREFERENCES_NAME = "myPreferences";
+    private static final String ACTUAL_URL_KEY = "ACTUAL_URL";
+    private SharedPreferences sharedPreferences;
+
 
 
     private final static String BASE_URL = "https://cloud.arest.io/889785849";
@@ -24,9 +28,8 @@ public class ApiService  extends RetrofitGsonSpiceService {
 
     @Override
     protected String getServerUrl() {
-        SharedPreferences preferences = getSharedPreferences("ActualURL",Activity.MODE_PRIVATE);
-        return  preferences.getString("Dupa", "dupa.com");
-      //  return BASE_URL;//+preferences.getString("Dupa", "dupa.com");
+        sharedPreferences = getSharedPreferences(PREFERENCES_NAME,Activity.MODE_PRIVATE);
+        return sharedPreferences.getString(ACTUAL_URL_KEY,"");
     }
 
 }
